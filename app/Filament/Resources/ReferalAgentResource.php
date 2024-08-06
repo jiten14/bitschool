@@ -2,47 +2,42 @@
 
 namespace App\Filament\Resources;
 
-use Closure;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
-use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
-use App\Models\User;
+use App\Filament\Resources\ReferalAgentResource\Pages;
+use App\Filament\Resources\ReferalAgentResource\RelationManagers;
+use App\Models\ReferalAgent;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Filament\Notifications\Actions\Action;
-use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Facades\Hash;
 
-class UserResource extends Resource
+class ReferalAgentResource extends Resource
 {
-    protected static ?string $model = User::class;
+    protected static ?string $model = ReferalAgent::class;
 
-    protected static ?string $navigationGroup = 'Auth';
+    protected static ?string $navigationGroup = 'Admission';
     protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                Forms\Components\TextInput::make('full_name')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\Textarea::make('postal_address')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
                     ->maxLength(255),
-                    Forms\Components\TextInput::make('password')
-                    ->password()
-                    ->maxLength(255)
-                    ->dehydrateStateUsing(fn ($state) => Hash::make($state))
-                    ->dehydrated(fn ($state) => filled($state))
-                    ->required(fn (string $context): bool => $context === 'create'),
+                Forms\Components\TextInput::make('phone')
+                    ->tel()
+                    ->required()
+                    ->maxLength(255),
             ]);
     }
 
@@ -50,9 +45,13 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                Tables\Columns\TextColumn::make('full_name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('postal_address')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('phone')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -68,26 +67,12 @@ class UserResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()
-                ->before(function (User $record, Tables\Actions\DeleteAction $action) {
-                    if ($record->name == Auth::user()->name) {
-                        Notification::make()
-                        ->danger()
-                        ->title('You can\'t delete self account!')
-                        ->persistent()
-                        ->send();
-                        $action->cancel();
-                    }
-                }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ])
-            ->checkIfRecordIsSelectableUsing(
-                fn (Model $record): bool => $record->name !== Auth::user()->name,
-            );
+            ]);
     }
 
     public static function getRelations(): array
@@ -100,9 +85,9 @@ class UserResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUsers::route('/'),
-            'create' => Pages\CreateUser::route('/create'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'index' => Pages\ListReferalAgents::route('/'),
+            'create' => Pages\CreateReferalAgent::route('/create'),
+            'edit' => Pages\EditReferalAgent::route('/{record}/edit'),
         ];
     }
 }
