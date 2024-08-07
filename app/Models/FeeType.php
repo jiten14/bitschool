@@ -6,22 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Semester extends Model
+class FeeType extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'semester',
+        'fee_type',
     ];
 
-    public function leads(): HasMany
+    public function fees(): HasMany
     {
-        return $this->hasMany(Lead::class);
-    }
-
-    public function students(): HasMany
-    {
-        return $this->hasMany(Student::class);
+        return $this->hasMany(Fee::class);
     }
 
 }

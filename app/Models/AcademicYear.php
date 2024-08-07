@@ -18,5 +18,10 @@ class AcademicYear extends Model
     {
         return $this->hasMany(Lead::class);
     }
+
+    public function students(): HasMany
+    {
+        return $this->hasMany(Student::class);
+    }
     
 }
