@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('student_id')->constrained()->cascadeOnDelete();
             $table->foreignId('fee_type_id')->constrained()->cascadeOnDelete();
+            $table->date('payment_date');
             $table->integer('amount');
             $table->timestamps();
         });

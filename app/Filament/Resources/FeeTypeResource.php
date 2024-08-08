@@ -17,8 +17,8 @@ class FeeTypeResource extends Resource
 {
     protected static ?string $model = FeeType::class;
 
-    protected static ?string $navigationGroup = 'Setup';
-    protected static ?int $navigationSort = 5;
+    protected static ?string $navigationGroup = 'Fees Collection';
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {

@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Filament\Facades\Filament;
 use Filament\Navigation\NavigationGroup;
+use Filament\Support\Assets\Css;
+use Filament\Support\Facades\FilamentAsset;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -28,6 +30,10 @@ class AppServiceProvider extends ServiceProvider
                     ->icon('heroicon-s-academic-cap')
                     ->collapsed(),
                 NavigationGroup::make()
+                    ->label('Fees Collection')
+                    ->icon('heroicon-s-currency-rupee')
+                    ->collapsed(),
+                NavigationGroup::make()
                     ->label('Setup')
                     ->icon('heroicon-s-cog')
                     ->collapsed(),
@@ -37,5 +43,10 @@ class AppServiceProvider extends ServiceProvider
                     ->collapsed(),
             ]);
         });
+
+        FilamentAsset::register([
+            Css::make('custom-stylesheet', __DIR__ . '/../../resources/css/custom.css'),
+        ]);
+
     }
 }

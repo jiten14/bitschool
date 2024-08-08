@@ -19,6 +19,7 @@ class FeeFactory extends Factory
         return [
             'student_id'=>rand(1, 20),
             'fee_type_id'=>rand(1, 2),
+            'payment_date'=>fake()->dateTimeBetween('2020-08-01','2024-07-31'),
             'amount' => fake()->numberBetween(0,49999),
         ];
     }

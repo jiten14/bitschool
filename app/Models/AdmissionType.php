@@ -14,11 +14,6 @@ class AdmissionType extends Model
         'admission_type',
     ];
 
-    public function leads(): HasMany
-    {
-        return $this->hasMany(Lead::class);
-    }
-
     public function students(): HasMany
     {
         return $this->hasMany(Student::class);

@@ -16,7 +16,6 @@ class Student extends Model
         'academic_year_id',
         'admission_type_id',
         'branch_id',
-        'semester_id',
         'full_name',
         'parents_name',
         'communication_address',
@@ -60,11 +59,6 @@ class Student extends Model
     public function branch(): BelongsTo
     {
         return $this->belongsTo(Branch::class);
-    }
-
-    public function semester(): BelongsTo
-    {
-        return $this->belongsTo(Semester::class);
     }
 
 }

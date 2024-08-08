@@ -15,11 +15,6 @@ class Branch extends Model
         'capacity',
     ];
 
-    public function leads(): HasMany
-    {
-        return $this->hasMany(Lead::class);
-    }
-
     public function students(): HasMany
     {
         return $this->hasMany(Student::class);
