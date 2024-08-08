@@ -37,13 +37,19 @@ class UserResource extends Resource
                     ->email()
                     ->required()
                     ->maxLength(255),
-                    Forms\Components\TextInput::make('password')
+                Forms\Components\TextInput::make('password')
                     ->password()
+                    ->revealable()
                     ->maxLength(255)
-                    ->dehydrateStateUsing(fn ($state) => Hash::make($state))
                     ->dehydrated(fn ($state) => filled($state))
                     ->required(fn (string $context): bool => $context === 'create'),
-            ]);
+                Forms\Components\CheckboxList::make('role')
+                    ->relationship('Roles', 'name')
+                    ->disabled(fn ($record) => !is_null($record) AND ($record->name == Auth::user()->name))
+                    ->required(),
+                Forms\Components\CheckboxList::make('permission')
+                    ->relationship('permissions', 'name')
+            ])->columns(3);
     }
 
     public static function table(Table $table): Table
@@ -54,6 +60,7 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('Roles.name'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -62,6 +69,7 @@ class UserResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('permissions.name'),
             ])
             ->filters([
                 //

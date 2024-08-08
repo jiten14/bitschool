@@ -14,6 +14,7 @@ use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Table;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Columns\Summarizers\Sum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Carbon;
@@ -67,7 +68,9 @@ class FeeResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('amount')
                     ->numeric()
-                    ->sortable(),
+                    ->money('INR')
+                    ->sortable()
+                    ->summarize(Sum::make()->label('Total')->money('INR')),
                 Tables\Columns\TextColumn::make('fee_type.fee_type')
                     ->label('Fee Type')
                     ->sortable(),

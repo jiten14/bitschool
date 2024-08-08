@@ -14,14 +14,6 @@ class CreateUser extends CreateRecord
 
     protected static bool $canCreateAnother = false;
 
-    protected function handleRecordCreation(array $data):Model
-    {
-        
-        $user =parent::handleRecordCreation($data);
-        $user->assignRole('admin');
-        return $user;
-    }
-
     protected function mutateFormDataBeforeCreate(array $data):array
     {
         $data['email_verified_at'] = Carbon::now();

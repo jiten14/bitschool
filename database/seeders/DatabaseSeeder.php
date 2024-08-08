@@ -13,8 +13,8 @@ use App\Models\FeeType;
 use App\Models\ReferalAgent;
 use App\Models\Student;
 use App\Models\Fee;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
+use App\Models\Role;
+use App\Models\Permission;
 
 class DatabaseSeeder extends Seeder
 {
@@ -30,20 +30,64 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
+        $this->command->warn(PHP_EOL . 'Creating Super Admin user...');
+        $sadminUser = User::factory()->create([
+            'email' => 'admin@example.com',
+            'name'  =>  'Super Admin',
+            'password' => bcrypt( 'admin123' ),
+        ]);
+        $this->command->info('Super Admin user created.');
+
         $this->command->warn(PHP_EOL . 'Creating admin user...');
         $adminUser = User::factory()->create([
-            'email' => 'admin@example.com',
+            'email' => 'test@example.com',
             'name'  =>  'Admin User',
-            'password' => bcrypt( 'admin123' ),
+            'password' => bcrypt( 'password' ),
         ]);
         $this->command->info('Admin user created.');
 
+        $this->command->warn(PHP_EOL . 'Creating Account user...');
+        $accUser = User::factory()->create([
+            'email' => 'account@example.com',
+            'name'  =>  'Accountant',
+            'password' => bcrypt( 'password' ),
+        ]);
+        $this->command->info('Account user created.');
+
+        $this->command->warn(PHP_EOL . 'Creating Admission user...');
+        $admUser = User::factory()->create([
+            'email' => 'admission@example.com',
+            'name'  =>  'Admission Incharge',
+            'password' => bcrypt( 'password' ),
+        ]);
+        $this->command->info('Admission user created.');
+
         $this->command->warn(PHP_EOL . 'Creating New Role...');
-        $adminRole = Role::create(['name' => 'admin']);
+        $sadminRole = Role::create(['name' => 'Superadmin']);
+        $adminRole = Role::create(['name' => 'Admin']);
+        $accRole = Role::create(['name' => 'Accountant']);
+        $admRole = Role::create(['name' => 'Admission In-Charge']);
         $this->command->info('Role created.');
 
+        $this->command->warn(PHP_EOL . 'Creating New Permission...');
+        $permission1 = Permission::create(['name' => 'Auth']);
+        $permission2 = Permission::create(['name' => 'Setup']);
+        $permission3 = Permission::create(['name' => 'Fees']);
+        $permission4 = Permission::create(['name' => 'Admission']);
+        $this->command->info('Permission created.');
+
+        $this->command->warn(PHP_EOL . 'Connecting Permission to Role...');
+        $sadminRole->givePermissionTo($permission1,$permission2,$permission3,$permission4);
+        $adminRole->givePermissionTo($permission2,$permission3,$permission4);
+        $accRole->givePermissionTo($permission3);
+        $admRole->givePermissionTo($permission4);
+        $this->command->info('Permission Connected.');
+
         $this->command->warn(PHP_EOL . 'Assigning Roles...');
+        $sadminUser->assignRole($sadminRole);
         $adminUser->assignRole($adminRole);
+        $accUser->assignRole($accRole);
+        $admUser->assignRole($admRole);
         $this->command->info('Role Assigned.');
 
         $this->command->warn(PHP_EOL . 'Adding Academic Years...');
