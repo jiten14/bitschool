@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use Illuminate\Support\Facades\Auth;
 use App\Filament\Resources\FeeResource\Pages;
 use App\Filament\Resources\FeeResource\RelationManagers;
 use App\Models\Fee;
@@ -135,11 +136,13 @@ class FeeResource extends Resource
             ->headerActions([
                 ExportAction::make()
                     ->exporter(FeeExporter::class)
-                    ->label('Export'),
+                    ->label('Export')
+                    ->visible(fn () => Auth::user()->hasPermissionTo('Fees')),
                 ImportAction::make()
                     ->importer(FeeImporter::class)
                     ->color('primary')
-                    ->label('Import'),
+                    ->label('Import')
+                    ->visible(fn () => Auth::user()->hasPermissionTo('Fees')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

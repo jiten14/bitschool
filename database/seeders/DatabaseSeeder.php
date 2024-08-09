@@ -62,11 +62,20 @@ class DatabaseSeeder extends Seeder
         ]);
         $this->command->info('Admission user created.');
 
+        $this->command->warn(PHP_EOL . 'Creating View Only user...');
+        $voUser = User::factory()->create([
+            'email' => 'user@example.com',
+            'name'  =>  'User',
+            'password' => bcrypt( 'password' ),
+        ]);
+        $this->command->info('View Only User created.');
+
         $this->command->warn(PHP_EOL . 'Creating New Role...');
         $sadminRole = Role::create(['name' => 'Superadmin']);
         $adminRole = Role::create(['name' => 'Admin']);
         $accRole = Role::create(['name' => 'Accountant']);
         $admRole = Role::create(['name' => 'Admission In-Charge']);
+        $userRole = Role::create(['name' => 'User']);
         $this->command->info('Role created.');
 
         $this->command->warn(PHP_EOL . 'Creating New Permission...');
@@ -74,13 +83,16 @@ class DatabaseSeeder extends Seeder
         $permission2 = Permission::create(['name' => 'Setup']);
         $permission3 = Permission::create(['name' => 'Fees']);
         $permission4 = Permission::create(['name' => 'Admission']);
+        $permission5 = Permission::create(['name' => 'AuthRole']);
+        $permission6 = Permission::create(['name' => 'AuthPermission']);
         $this->command->info('Permission created.');
 
         $this->command->warn(PHP_EOL . 'Connecting Permission to Role...');
-        $sadminRole->givePermissionTo($permission1,$permission2,$permission3,$permission4);
+        $sadminRole->givePermissionTo($permission1,$permission2,$permission3,$permission4,$permission5,$permission6);
         $adminRole->givePermissionTo($permission2,$permission3,$permission4);
         $accRole->givePermissionTo($permission3);
         $admRole->givePermissionTo($permission4);
+        $userRole->givePermissionTo($permission1);
         $this->command->info('Permission Connected.');
 
         $this->command->warn(PHP_EOL . 'Assigning Roles...');
@@ -88,6 +100,7 @@ class DatabaseSeeder extends Seeder
         $adminUser->assignRole($adminRole);
         $accUser->assignRole($accRole);
         $admUser->assignRole($admRole);
+        $voUser->assignRole($userRole);
         $this->command->info('Role Assigned.');
 
         $this->command->warn(PHP_EOL . 'Adding Academic Years...');
@@ -127,7 +140,7 @@ class DatabaseSeeder extends Seeder
 
         $this->command->warn(PHP_EOL . 'Adding some Dummy Referal Agent...');
         $ras = ReferalAgent::factory(20)->create();
-        $this->command->info('Dummy User Created.');
+        $this->command->info('Dummy Referal Agent Added.');
 
         $this->command->warn(PHP_EOL . 'Adding some Dummy Student...');
         $student = Student::factory(20)->create();

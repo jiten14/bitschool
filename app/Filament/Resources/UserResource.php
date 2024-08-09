@@ -32,24 +32,25 @@ class UserResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->disabled(fn ($record) => ($record->name == 'Super Admin') AND Auth::user()->hasRole('User')),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->disabled(fn ($record) => ($record->name == 'Super Admin') AND Auth::user()->hasRole('User')),
                 Forms\Components\TextInput::make('password')
                     ->password()
                     ->revealable()
                     ->maxLength(255)
                     ->dehydrated(fn ($state) => filled($state))
-                    ->required(fn (string $context): bool => $context === 'create'),
+                    ->required(fn (string $context): bool => $context === 'create')
+                    ->disabled(fn ($record) => ($record->name == 'Super Admin') AND Auth::user()->hasRole('User')),
                 Forms\Components\CheckboxList::make('role')
                     ->relationship('Roles', 'name')
-                    ->disabled(fn ($record) => !is_null($record) AND ($record->name == Auth::user()->name))
+                    ->disabled(fn ($record) => !is_null($record) AND ($record->name == Auth::user()->name) or Auth::user()->hasRole('User'))
                     ->required(),
-                Forms\Components\CheckboxList::make('permission')
-                    ->relationship('permissions', 'name')
-            ])->columns(3);
+            ])->columns(2);
     }
 
     public static function table(Table $table): Table
@@ -69,7 +70,6 @@ class UserResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('permissions.name'),
             ])
             ->filters([
                 //
@@ -86,11 +86,13 @@ class UserResource extends Resource
                         ->send();
                         $action->cancel();
                     }
-                }),
+                })
+                ->hidden(fn () => Auth::user()->hasRole('User')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                    ->hidden(fn () => Auth::user()->hasRole('User')),
                 ]),
             ])
             ->checkIfRecordIsSelectableUsing(

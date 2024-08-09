@@ -15,7 +15,7 @@ class PermissionPolicy
     public function viewAny(User $user)
     {
 
-        return $user->hasPermissionTo('Auth');
+        return $user->hasPermissionTo('AuthPermission');
         
     }
 

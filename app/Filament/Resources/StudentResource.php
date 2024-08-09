@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use Illuminate\Support\Facades\Auth;
 use App\Filament\Resources\StudentResource\Pages;
 use App\Filament\Resources\StudentResource\RelationManagers;
 use App\Models\Student;
@@ -15,6 +16,8 @@ use Filament\Tables\Actions\ExportAction;
 use App\Filament\Imports\StudentImporter;
 use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Table;
+use Filament\Infolists;
+use Filament\Infolists\Infolist;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Filters\SelectFilter;
@@ -178,17 +181,20 @@ class StudentResource extends Resource
                     ->preload(),
             ], layout: FiltersLayout::AboveContent)
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->headerActions([
                 ExportAction::make()
                     ->exporter(StudentExporter::class)
-                    ->label('Export'),
+                    ->label('Export')
+                    ->visible(fn () => Auth::user()->hasPermissionTo('Admission')),
                 ImportAction::make()
                     ->importer(StudentImporter::class)
                     ->color('primary')
-                    ->label('Import'),
+                    ->label('Import')
+                    ->visible(fn () => Auth::user()->hasPermissionTo('Admission')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -200,7 +206,7 @@ class StudentResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\FeesRelationManager::class,
         ];
     }
 
@@ -216,8 +222,22 @@ class StudentResource extends Resource
         return [
             'index' => Pages\ListStudents::route('/'),
             'create' => Pages\CreateStudent::route('/create'),
+            'view' => Pages\ViewStudent::route('/{record}'),
             'edit' => Pages\EditStudent::route('/{record}/edit'),
         ];
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Infolists\Components\Section::make()
+                    ->schema([
+                    Infolists\Components\TextEntry::make('full_name'),
+                    Infolists\Components\TextEntry::make('branch.branch'),
+                    ])
+                    ->columns(2),
+            ]);
     }
 
 }

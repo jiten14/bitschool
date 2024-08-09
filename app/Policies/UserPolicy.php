@@ -13,7 +13,28 @@ class UserPolicy
      * Create a new policy instance.
      */
 
-    public function viewAny(User $user)
+    public function view(User $user)
+    {
+
+        return $user->hasPermissionTo('Auth');
+        
+    }
+
+    public function create(User $user)
+    {
+
+        return $user->hasPermissionTo('Auth');
+        
+    }
+
+    public function update(User $user)
+    {
+
+        return $user->hasPermissionTo('Auth');
+        
+    }
+
+    public function delete(User $user)
     {
 
         return $user->hasPermissionTo('Auth');

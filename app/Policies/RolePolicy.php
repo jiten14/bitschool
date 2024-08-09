@@ -12,9 +12,10 @@ class RolePolicy
     /**
      * Create a new policy instance.
      */
+    
     public function viewAny(User $user)
     {
-        return $user->hasPermissionTo('Auth');
+        return $user->hasPermissionTo('AuthRole');
         
     }
 

@@ -12,7 +12,29 @@ class StudentPolicy
     /**
      * Create a new policy instance.
      */
-    public function viewAny(User $user)
+
+    public function view(User $user)
+    {
+
+        return $user->hasPermissionTo('Fees');
+        
+    }
+
+    public function create(User $user)
+    {
+
+        return $user->hasPermissionTo('Admission');
+        
+    }
+
+    public function update(User $user)
+    {
+
+        return $user->hasPermissionTo('Admission');
+        
+    }
+
+    public function delete(User $user)
     {
 
         return $user->hasPermissionTo('Admission');
