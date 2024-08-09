@@ -17,7 +17,7 @@ class EditRole extends EditRecord
         return [
             Actions\DeleteAction::make()
             ->before(function (Role $record, Actions\DeleteAction $action) {
-                if ($record->name == 'admin' or $record->name == 'user') {
+                if ($record->name == 'Superadmin') {
                     Notification::make()
                     ->danger()
                     ->title('You can\'t delete Default Roles!')

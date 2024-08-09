@@ -142,6 +142,13 @@ class FeeResource extends Resource
         ];
     }
 
+    public static function getWidgets(): array
+    {
+        return [
+            FeeResource\Widgets\FeeOverview::class,
+        ];
+    }
+
     public static function getPages(): array
     {
         return [

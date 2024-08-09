@@ -31,7 +31,7 @@ class RoleResource extends Resource
             ->schema([
                 TextInput::make('name')
                 ->unique(ignoreRecord: true)
-                ->disabled(fn ($record) => !is_null($record) AND ($record->name == 'superadmin' or $record->name == 'admin')),
+                ->disabled(fn ($record) => !is_null($record) AND ($record->name == 'Superadmin')),
                 Forms\Components\CheckboxList::make('permission')
                     ->relationship('permissions', 'name')
             ]);
@@ -51,7 +51,7 @@ class RoleResource extends Resource
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make()
                 ->before(function (Role $record, Tables\Actions\DeleteAction $action) {
-                    if ($record->name == 'superadmin' or $record->name == 'admin') {
+                    if ($record->name == 'Superadmin') {
                         Notification::make()
                         ->danger()
                         ->title('You can\'t delete Default Roles!')
@@ -67,7 +67,7 @@ class RoleResource extends Resource
                 ]),
             ])
             ->checkIfRecordIsSelectableUsing(
-                fn (Model $record): bool => $record->name !== 'superadmin' and $record->name !== 'admin',
+                fn (Model $record): bool => $record->name !== 'Superadmin',
             );
             
     }

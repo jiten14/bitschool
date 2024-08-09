@@ -4,11 +4,14 @@ namespace App\Filament\Resources\StudentResource\Pages;
 
 use App\Filament\Resources\StudentResource;
 use Filament\Actions;
+use Filament\Pages\Concerns\ExposesTableToWidgets;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
 
 class ListStudents extends ListRecords
 {
+    use ExposesTableToWidgets;
+    
     protected static string $resource = StudentResource::class;
 
     protected function getHeaderActions(): array
@@ -16,6 +19,11 @@ class ListStudents extends ListRecords
         return [
             Actions\CreateAction::make(),
         ];
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return StudentResource::getWidgets();
     }
 
     public function getTabs(): array

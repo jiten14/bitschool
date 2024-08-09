@@ -41,12 +41,12 @@ class PermissionResource extends Resource
                 //
             ])
             ->actions([
-                //Tables\Actions\EditAction::make(),
-                //Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    //Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -63,7 +63,7 @@ class PermissionResource extends Resource
         return [
             'index' => Pages\ListPermissions::route('/'),
             'create' => Pages\CreatePermission::route('/create'),
-            //'edit' => Pages\EditPermission::route('/{record}/edit'),
+            'edit' => Pages\EditPermission::route('/{record}/edit'),
         ];
     }
 }

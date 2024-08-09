@@ -191,6 +191,13 @@ class StudentResource extends Resource
         ];
     }
 
+    public static function getWidgets(): array
+    {
+        return [
+            StudentResource\Widgets\StudentOverview::class,
+        ];
+    }
+
     public static function getPages(): array
     {
         return [
