@@ -11,6 +11,10 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Enums\FiltersLayout;
+use App\Filament\Exports\FeeExporter;
+use Filament\Tables\Actions\ExportAction;
+use App\Filament\Imports\FeeImporter;
+use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Table;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Filters\SelectFilter;
@@ -127,6 +131,15 @@ class FeeResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+            ])
+            ->headerActions([
+                ExportAction::make()
+                    ->exporter(FeeExporter::class)
+                    ->label('Export'),
+                ImportAction::make()
+                    ->importer(FeeImporter::class)
+                    ->color('primary')
+                    ->label('Import'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

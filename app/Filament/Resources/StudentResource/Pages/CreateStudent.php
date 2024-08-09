@@ -11,5 +11,10 @@ class CreateStudent extends CreateRecord
     protected static string $resource = StudentResource::class;
     
     protected static bool $canCreateAnother = false;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->previousUrl ?? $this->getResource()::getUrl('index');
+    }
     
 }
