@@ -105,56 +105,23 @@ class StudentResource extends Resource
                     ->weight(FontWeight::Bold)
                     ->searchable()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('full_name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('parents_name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('phone')
+                    ->searchable(),
                 Tables\Columns\IconColumn::make('payment_status')
                     ->label('Payment')
-                    ->boolean()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->boolean(),
                 Tables\Columns\TextColumn::make('student_status')
-                    ->label('Status')
-                    ->sortable()
+                    ->label('Admn. Status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'Hold' => 'warning',
                         'Admitted' => 'success',
                         'Rejected' => 'danger',
                     }),
-                Tables\Columns\TextColumn::make('full_name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('parents_name'),
-                Tables\Columns\TextColumn::make('phone')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('email')
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('communication_address')
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('parmanent_address')
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('academic_year.academic_year')
-                    ->numeric()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('admission_type.admission_type')
-                    ->numeric()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('branch.branch')
-                    ->numeric()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('referal_agent.full_name')
-                    ->label('Refered By')
-                    ->numeric()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 TernaryFilter::make('payment_status')
@@ -233,8 +200,25 @@ class StudentResource extends Resource
             ->schema([
                 Infolists\Components\Section::make()
                     ->schema([
+                    Infolists\Components\TextEntry::make('reg_no'),
                     Infolists\Components\TextEntry::make('full_name'),
+                    Infolists\Components\TextEntry::make('parents_name'),
+                    Infolists\Components\TextEntry::make('phone'),
+                    Infolists\Components\TextEntry::make('email'),
+                    Infolists\Components\TextEntry::make('communication_address'),
+                    Infolists\Components\TextEntry::make('parmanent_address'),
+                    Infolists\Components\TextEntry::make('academic_year.academic_year'),
+                    Infolists\Components\TextEntry::make('admission_type.admission_type'),
                     Infolists\Components\TextEntry::make('branch.branch'),
+                    Infolists\Components\TextEntry::make('referal_agent.full_name'),
+                    Infolists\Components\IconEntry::make('payment_status')->boolean(),
+                    Infolists\Components\TextEntry::make('student_status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'Hold' => 'warning',
+                        'Admitted' => 'success',
+                        'Rejected' => 'danger',
+                    }),
                     ])
                     ->columns(2),
             ]);

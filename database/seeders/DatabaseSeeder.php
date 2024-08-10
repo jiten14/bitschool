@@ -9,6 +9,7 @@ use App\Models\AcademicYear;
 use App\Models\AdmissionType;
 use App\Models\Branch;
 use App\Models\Semester;
+use App\Models\Setting;
 use App\Models\FeeType;
 use App\Models\ReferalAgent;
 use App\Models\Student;
@@ -137,6 +138,10 @@ class DatabaseSeeder extends Seeder
         $ft1 = FeeType::create(['fee_type'=>'Admission Fee']);
         $ft2 = FeeType::create(['fee_type'=>'Examination Fee']);
         $this->command->info('Fee Types Added.');
+
+        $this->command->warn(PHP_EOL . 'Adding Settings...');
+        $set = Setting::create(['public_form'=>0]);
+        $this->command->info('Settings Added.');
 
         $this->command->warn(PHP_EOL . 'Adding some Dummy Referal Agent...');
         $ras = ReferalAgent::factory(20)->create();
