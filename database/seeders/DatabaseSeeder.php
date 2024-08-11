@@ -84,16 +84,15 @@ class DatabaseSeeder extends Seeder
         $permission2 = Permission::create(['name' => 'Setup']);
         $permission3 = Permission::create(['name' => 'Fees']);
         $permission4 = Permission::create(['name' => 'Admission']);
-        $permission5 = Permission::create(['name' => 'AuthRole']);
-        $permission6 = Permission::create(['name' => 'AuthPermission']);
+        $permission5 = Permission::create(['name' => 'Editauth']);
         $this->command->info('Permission created.');
 
         $this->command->warn(PHP_EOL . 'Connecting Permission to Role...');
-        $sadminRole->givePermissionTo($permission1,$permission2,$permission3,$permission4,$permission5,$permission6);
+        $sadminRole->givePermissionTo($permission1,$permission2,$permission3,$permission4);
         $adminRole->givePermissionTo($permission2,$permission3,$permission4);
         $accRole->givePermissionTo($permission3);
         $admRole->givePermissionTo($permission4);
-        $userRole->givePermissionTo($permission1);
+        $voUser->givePermissionTo($permission5);
         $this->command->info('Permission Connected.');
 
         $this->command->warn(PHP_EOL . 'Assigning Roles...');

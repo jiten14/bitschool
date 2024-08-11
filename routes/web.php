@@ -13,10 +13,6 @@ use App\Http\Controllers\StudentController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-/*Route::get('/', function () {
-    return view('welcome');
-});*/
 Route::resource('/', StudentController::class);
 
 Route::redirect('/login', 'admin/login')->name('login');

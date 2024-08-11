@@ -15,7 +15,7 @@ class RolePolicy
     
     public function viewAny(User $user)
     {
-        return $user->hasPermissionTo('AuthRole');
+        return $user->hasPermissionTo('Auth');
         
     }
 

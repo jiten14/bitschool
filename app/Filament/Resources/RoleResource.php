@@ -33,7 +33,7 @@ class RoleResource extends Resource
                 ->unique(ignoreRecord: true)
                 ->disabled(fn ($record) => !is_null($record) AND ($record->name == 'Superadmin')),
                 Forms\Components\CheckboxList::make('permission')
-                    ->relationship('permissions', 'name')
+                    ->relationship('permissions', 'name'),
             ]);
     }
 

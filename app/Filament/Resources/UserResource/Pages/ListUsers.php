@@ -15,7 +15,6 @@ class ListUsers extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-            ->hidden(fn () => Auth::user()->hasRole('User')),
         ];
     }
 }

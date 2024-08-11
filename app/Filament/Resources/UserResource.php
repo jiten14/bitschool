@@ -33,24 +33,33 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255)
-                    ->disabled(fn ($record) => ($record->name == 'Super Admin') AND Auth::user()->hasRole('User')),
+                    ->disabled(fn ($record) => !is_null($record) AND ($record->name == 'Super Admin') AND Auth::user()->hasRole('User')),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
                     ->maxLength(255)
-                    ->disabled(fn ($record) => ($record->name == 'Super Admin') AND Auth::user()->hasRole('User')),
+                    ->disabled(fn ($record) => !is_null($record) AND ($record->name == 'Super Admin') AND Auth::user()->hasRole('User')),
                 Forms\Components\TextInput::make('password')
                     ->password()
                     ->revealable()
                     ->maxLength(255)
+                    ->required()
+                    ->visibleOn('create'),
+                Forms\Components\TextInput::make('password')
+                    ->password()
+                    ->revealable()
+                    ->maxLength(255)
+                    ->dehydrateStateUsing(fn ($state) => Hash::make($state))
                     ->dehydrated(fn ($state) => filled($state))
-                    ->required(fn (string $context): bool => $context === 'create')
-                    ->disabled(fn ($record) => ($record->name == 'Super Admin') AND Auth::user()->hasRole('User')),
+                    ->visibleOn('edit'),
                 Forms\Components\CheckboxList::make('role')
                     ->relationship('Roles', 'name')
                     ->disabled(fn ($record) => !is_null($record) AND ($record->name == Auth::user()->name) or Auth::user()->hasRole('User'))
                     ->required(),
-            ])->columns(2);
+                Forms\Components\CheckboxList::make('permission')
+                    ->relationship('permissions', 'name')
+                    ->disabled(fn ($record) => !is_null($record) AND ($record->name == Auth::user()->name) or Auth::user()->hasRole('User'))
+            ])->columns(3);
     }
 
     public static function table(Table $table): Table
@@ -62,6 +71,7 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('Roles.name'),
+                Tables\Columns\TextColumn::make('Permissions.name'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -87,12 +97,10 @@ class UserResource extends Resource
                         $action->cancel();
                     }
                 })
-                ->hidden(fn () => Auth::user()->hasRole('User')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
-                    ->hidden(fn () => Auth::user()->hasRole('User')),
                 ]),
             ])
             ->checkIfRecordIsSelectableUsing(

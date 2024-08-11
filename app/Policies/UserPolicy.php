@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Auth\Access\Response;
 
 class UserPolicy
 {
@@ -12,6 +13,13 @@ class UserPolicy
     /**
      * Create a new policy instance.
      */
+
+    public function viewAny(User $user): bool
+    {
+
+        return $user->hasAnyPermission(['Auth','Editauth']);
+        
+    }
 
     public function view(User $user)
     {
@@ -30,7 +38,7 @@ class UserPolicy
     public function update(User $user)
     {
 
-        return $user->hasPermissionTo('Auth');
+        return $user->hasAnyPermission(['Auth','Editauth']);
         
     }
 

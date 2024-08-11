@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\AcademicYear;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Auth\Access\Response;
 
 class FeePolicy
 {
@@ -13,10 +14,17 @@ class FeePolicy
      * Create a new policy instance.
      */
 
+    public function viewAny(User $user): bool
+    {
+ 
+        return $user->hasAnyPermission(['Admission','Fees']);
+         
+    }
+
     public function view(User $user)
     {
 
-        return $user->hasPermissionTo('Admission');
+        return $user->hasPermissionTo('Fees');
         
     }
 
